@@ -42,6 +42,7 @@
                 <outlet property="reminderMinutesTextField" destination="R9v-BZ-yhR" id="OVt-ic-hzF"/>
                 <outlet property="showHideShortcutView" destination="DLB-Fw-7tX" id="T2o-mF-KXG"/>
                 <outlet property="startStopShortcutView" destination="Ft4-tk-xRA" id="5tb-G5-s2R"/>
+                <outlet property="stopOnShutdownCheckbox" destination="QYT-Z0-OJj" id="Aco-4O-hja"/>
                 <outlet property="useIdleDetectionButton" destination="Lgk-gZ-8Ha" id="Erp-FO-vcw"/>
                 <outlet property="usePomodoroBreakButton" destination="BzK-d8-1HF" id="nWi-xj-Mxm"/>
                 <outlet property="usePomodoroButton" destination="Rmf-uW-sZP" id="fZa-h4-WjK"/>
@@ -272,6 +273,9 @@
                                             <buttonCell key="cell" type="check" title="Stop running entry on computer sleep/shutdown" bezelStyle="regularSquare" imagePosition="left" inset="2" id="QYT-Z0-OJj">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <connections>
+                                                    <action selector="stopOnShutdownAndSleepOnChange:" target="-2" id="Pwg-7V-tCz"/>
+                                                </connections>
                                             </buttonCell>
                                             <connections>
                                                 <outlet property="nextKeyView" destination="yWA-BY-OMt" id="a8i-78-qPM"/>
