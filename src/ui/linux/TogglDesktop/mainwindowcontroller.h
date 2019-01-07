@@ -18,6 +18,7 @@
 #include "./feedbackdialog.h"
 #include "./qxtglobalshortcut.h"
 #include "./systemtray.h"
+#include "./powermanagement.h"
 
 namespace Ui {
 class MainWindowController;
@@ -88,9 +89,6 @@ class MainWindowController : public QMainWindow {
     void updateShowHideShortcut();
     void updateContinueStopShortcut();
 
-    void commitDataRequest();
-    void stateChanged(Qt::ApplicationState state);
-
  private:
     Ui::MainWindowController *ui;
 
@@ -124,6 +122,8 @@ class MainWindowController : public QMainWindow {
     bool pomodoro;
 
     QString script;
+
+    PowerManagement *powerManagement;
 
     void readSettings();
     void writeSettings();
