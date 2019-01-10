@@ -288,7 +288,6 @@ extern void *ctx;
 
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:addedHeight forKey:@"height"];
 
-//    [NSNotificationCenter defaultCenter] postnotifi
 	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kResizeEditForm
 																object:nil
 															  userInfo:userInfo];
