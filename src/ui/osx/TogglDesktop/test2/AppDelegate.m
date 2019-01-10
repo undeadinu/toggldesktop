@@ -33,6 +33,7 @@
 #import "idler.h"
 #import "toggl_api.h"
 #import "UserNotificationCenter.h"
+#import "TogglDesktop-Swift.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) IBOutlet MainWindowController *mainWindowController;
@@ -465,9 +466,7 @@ BOOL onTop = NO;
 
 - (void)startNew:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(new:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self new:notification.object];
 }
 
 - (void)new:(TimeEntryViewItem *)new_time_entry
@@ -497,9 +496,7 @@ BOOL onTop = NO;
 
 - (void)startNewShortcut:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(newShortcut:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self newShortcut:notification.object];
 }
 
 - (void)newShortcut:(TimeEntryViewItem *)new_time_entry
@@ -521,9 +518,7 @@ BOOL onTop = NO;
 
 - (void)startContinueTimeEntry:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(continueTimeEntry:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self continueTimeEntry:notification.object];
 }
 
 - (void)continueTimeEntry:(NSString *)guid
@@ -543,9 +538,7 @@ BOOL onTop = NO;
 
 - (void)startStop:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(stop)
-						   withObject:nil
-						waitUntilDone:NO];
+	[self stop];
 }
 
 - (void)stop
@@ -558,9 +551,7 @@ BOOL onTop = NO;
 
 - (void)startToggleGroup:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(toggleGroup:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self toggleGroup:notification.object];
 }
 
 - (void)toggleGroup:(NSString *)key
@@ -573,9 +564,7 @@ BOOL onTop = NO;
 
 - (void)startUpdateIconTooltip:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(updateIconTooltip:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self updateIconTooltip:notification.object];
 }
 
 - (void)updateIconTooltip:(NSString *)text
@@ -586,9 +575,7 @@ BOOL onTop = NO;
 
 - (void)startDisplaySettings:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displaySettings:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displaySettings:notification.object];
 }
 
 - (void)displaySettings:(DisplayCommand *)cmd
@@ -698,15 +685,13 @@ BOOL onTop = NO;
 	{
 		[self.manualModeMenuItem setTitle:@"Use manual mode"];
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:mode
-														object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:mode
+																object:nil];
 }
 
 - (void)startDisplayApp:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayApp:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayApp:notification.object];
 }
 
 - (void)displayApp:(DisplayCommand *)cmd
@@ -720,9 +705,7 @@ BOOL onTop = NO;
 
 - (void)startDisplayPromotion:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayPromotion:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayPromotion:notification.object];
 }
 
 - (void)displayPromotion:(NSNumber *)promotion_type
@@ -750,9 +733,7 @@ BOOL onTop = NO;
 
 - (void)startDisplayLogin:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayLogin:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayLogin:notification.object];
 }
 
 - (void)displayLogin:(DisplayCommand *)cmd
@@ -775,9 +756,7 @@ BOOL onTop = NO;
 
 - (void)startDisplayOnlineState:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayOnlineState:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayOnlineState:notification.object];
 }
 
 - (void)displayOnlineState:(NSNumber *)state
@@ -790,9 +769,7 @@ BOOL onTop = NO;
 
 - (void)startDisplaySyncState:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displaySyncState:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displaySyncState:notification.object];
 }
 
 - (void)displaySyncState:(NSNumber *)state
@@ -811,9 +788,7 @@ BOOL onTop = NO;
 
 - (void)startDisplayUnsyncedItems:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayUnsyncedItems:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayUnsyncedItems:notification.object];
 }
 
 - (void)displayUnsyncedItems:(NSNumber *)count
@@ -895,9 +870,7 @@ BOOL onTop = NO;
 
 - (void)startDisplayTimerState:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayTimerState:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayTimerState:notification.object];
 }
 
 - (void)displayTimerState:(TimeEntryViewItem *)timeEntry
@@ -1044,8 +1017,8 @@ BOOL onTop = NO;
 
 - (void)onNewMenuItem:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kCommandNewShortcut
-														object:[[TimeEntryViewItem alloc] init]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kCommandNewShortcut
+																object:[[TimeEntryViewItem alloc] init]];
 }
 
 - (void)onSendFeedbackMenuItem
@@ -1061,14 +1034,14 @@ BOOL onTop = NO;
 
 - (IBAction)onContinueMenuItem:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kCommandContinue
-														object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kCommandContinue
+																object:nil];
 }
 
 - (IBAction)onStopMenuItem:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kCommandStop
-														object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kCommandStop
+																object:nil];
 }
 
 - (IBAction)onSyncMenuItem:(id)sender
@@ -1458,9 +1431,7 @@ const NSString *appName = @"osx_native_app";
 
 - (void)startDisplayIdleNotification:(NSNotification *)notification
 {
-	[self performSelectorOnMainThread:@selector(displayIdleNotification:)
-						   withObject:notification.object
-						waitUntilDone:NO];
+	[self displayIdleNotification:notification.object];
 }
 
 - (void)displayIdleNotification:(IdleEvent *)idleEvent
@@ -1546,20 +1517,20 @@ const NSString *appName = @"osx_native_app";
 
 void on_online_state(const int64_t state)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayOnlineState
-														object:[NSNumber numberWithLong:state]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayOnlineState
+																object:[NSNumber numberWithLong:state]];
 }
 
 void on_sync_state(const int64_t state)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplaySyncState
-														object:[NSNumber numberWithLong:state]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplaySyncState
+																object:[NSNumber numberWithLong:state]];
 }
 
 void on_unsynced_items(const int64_t count)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayUnsyncedItems
-														object:[NSNumber numberWithLong:count]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayUnsyncedItems
+																object:[NSNumber numberWithLong:count]];
 }
 
 void on_login(const bool_t open, const uint64_t user_id)
@@ -1570,8 +1541,8 @@ void on_login(const bool_t open, const uint64_t user_id)
 	cmd.open = open;
 	cmd.user_id = user_id;
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayLogin
-														object:cmd];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayLogin
+																object:cmd];
 }
 
 void on_reminder(const char *title, const char *informative_text)
@@ -1621,34 +1592,34 @@ void on_time_entry_list(const bool_t open,
 	cmd.open = open;
 	cmd.timeEntries = viewitems;
 	cmd.show_load_more = show_load_more;
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayTimeEntryList
-														object:cmd];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kUpdateIconTooltip
-														object:todayTotal];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayTimeEntryList
+																object:cmd];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kUpdateIconTooltip
+																object:todayTotal];
 }
 
 void on_time_entry_autocomplete(TogglAutocompleteView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayTimeEntryAutocomplete
-														object:[AutocompleteItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayTimeEntryAutocomplete
+																object:[AutocompleteItem loadAll:first]];
 }
 
 void on_mini_timer_autocomplete(TogglAutocompleteView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayMinitimerAutocomplete
-														object:[AutocompleteItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayMinitimerAutocomplete
+																object:[AutocompleteItem loadAll:first]];
 }
 
 void on_project_autocomplete(TogglAutocompleteView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayProjectAutocomplete
-														object:[AutocompleteItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayProjectAutocomplete
+																object:[AutocompleteItem loadAll:first]];
 }
 
 void on_tags(TogglGenericView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayTags
-														object:[ViewItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayTags
+																object:[ViewItem loadAll:first]];
 }
 
 void on_autotracker_rules(TogglAutotrackerRuleView *first, const uint64_t title_count, char_t *title_list[])
@@ -1664,8 +1635,8 @@ void on_autotracker_rules(TogglAutotrackerRuleView *first, const uint64_t title_
 			@"rules": [AutotrackerRuleItem loadAll:first],
 			@"titles": titles
 	};
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayAutotrackerRules
-														object:data];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayAutotrackerRules
+																object:data];
 }
 
 void on_autotracker_notification(const char_t *project_name,
@@ -1679,20 +1650,20 @@ void on_autotracker_notification(const char_t *project_name,
 
 void on_promotion(const int64_t promotion_type)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayPromotion
-														object:[NSNumber numberWithLong:promotion_type]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayPromotion
+																object:[NSNumber numberWithLong:promotion_type]];
 }
 
 void on_client_select(TogglGenericView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayClientSelect
-														object:[ViewItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayClientSelect
+																object:[ViewItem loadAll:first]];
 }
 
 void on_workspace_select(TogglGenericView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayWorkspaceSelect
-														object:[ViewItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayWorkspaceSelect
+																object:[ViewItem loadAll:first]];
 }
 
 void on_time_entry_editor(const bool_t open,
@@ -1706,8 +1677,8 @@ void on_time_entry_editor(const bool_t open,
 	cmd.open = open;
 	cmd.timeEntry = item;
 	cmd.timeEntry.focusedFieldName = [NSString stringWithUTF8String:focused_field_name];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayTimeEntryEditor
-														object:cmd];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayTimeEntryEditor
+																object:cmd];
 }
 
 void on_app(const bool_t open)
@@ -1715,16 +1686,16 @@ void on_app(const bool_t open)
 	DisplayCommand *cmd = [[DisplayCommand alloc] init];
 
 	cmd.open = open;
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayApp
-														object:cmd];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayApp
+																object:cmd];
 }
 
 void on_error(const char *errmsg, const bool_t is_user_error)
 {
 	NSString *msg = [NSString stringWithUTF8String:errmsg];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayError
-														object:msg];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayError
+																object:msg];
 	if (!is_user_error)
 	{
 		char *str = toggl_get_update_channel(ctx);
@@ -1737,8 +1708,9 @@ void on_error(const char *errmsg, const bool_t is_user_error)
 
 void on_overlay(const int64_t type)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayOverlay
-														object:[NSNumber numberWithLong:type]];
+//    [NSNotificationCenter defaultCenter] post
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayOverlay
+																object:[NSNumber numberWithLong:type]];
 }
 
 void on_settings(const bool_t open,
@@ -1751,8 +1723,8 @@ void on_settings(const bool_t open,
 	DisplayCommand *cmd = [[DisplayCommand alloc] init];
 	cmd.open = open;
 	cmd.settings = s;
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplaySettings
-														object:cmd];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplaySettings
+																object:cmd];
 }
 
 void on_timer_state(TogglTimeEntryView *te)
@@ -1764,7 +1736,8 @@ void on_timer_state(TogglTimeEntryView *te)
 		view_item = [[TimeEntryViewItem alloc] init];
 		[view_item load:te];
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayTimerState object:view_item];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayTimerState
+																object:view_item];
 }
 
 void on_idle_notification(
@@ -1781,7 +1754,8 @@ void on_idle_notification(
 	idleEvent.duration = [NSString stringWithUTF8String:duration];
 	idleEvent.started = started;
 	idleEvent.timeEntryDescription = [NSString stringWithUTF8String:description];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayIdleNotification object:idleEvent];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayIdleNotification
+																object:idleEvent];
 }
 
 void on_project_colors(
@@ -1794,12 +1768,14 @@ void on_project_colors(
 	{
 		[colors addObject:[NSString stringWithUTF8String:list[i]]];
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:kSetProjectColors object:colors];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kSetProjectColors
+																object:colors];
 }
 
 void on_countries(TogglCountryView *first)
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:kDisplayCountries object:[CountryViewItem loadAll:first]];
+	[[NSNotificationCenter defaultCenter] postNotificationOnMainThread:kDisplayCountries
+																object:[CountryViewItem loadAll:first]];
 }
 
 @end
